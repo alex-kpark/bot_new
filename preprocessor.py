@@ -20,8 +20,8 @@ for filename in filenames:
     else:
         user_files.append(filename)
 
-bot_save_path = 'D:/AION_DATA/30_bots/'
-user_save_path = 'D:/AION_DATA/30_users/'
+bot_save_path = 'D:/AION_DATA/60_bots/'
+user_save_path = 'D:/AION_DATA/60_users/'
 
 '''
 필요한 함수들 정의
@@ -102,9 +102,9 @@ def timeseries(weekly_df, account_list, window): #전체 주 데이터, 봇/유�
             #Window 크기로 잘라주고
             sliced = individual_df[window : window + window_size]
 
-            #통계값 추가
-            sliced.loc[len(sliced)] = sliced.mean(axis=0)
-            sliced.loc[len(sliced)] = sliced.std(axis=0) #하나 추가되어서 자동으로 +1 인덱스 늘어남
+            #통계값 추가하면 바로 뻑나므로 추가하지 말 것 --> 통계값은 리쉐이퍼에서 진행
+            #sliced.loc[len(sliced)] = sliced.mean(axis=0)
+            #sliced.loc[len(sliced)] = sliced.std(axis=0) #하나 추가되어서 자동으로 +1 인덱스 늘어남
 
             sliced_np = sliced.values
             dataset.append(sliced_np)
@@ -135,10 +135,11 @@ def norm_flat(data_in_list):
 
 
 #봇 수집 -> 유저 할 때는 유저로 바꾸기만 하면 됨
-
-window_size = 30
+'''
+window_size = 60
 for bot_file in bot_files:
     data_generator('bot', data_path, bot_file, window_size)
 
 for user_file in user_files:
     data_generator('user', data_path, user_file, window_size)
+ '''
