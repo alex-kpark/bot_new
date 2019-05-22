@@ -33,8 +33,8 @@ data_dim = 11 #피쳐
 n_class = 2 #BinaryS Classification
 total_epochs = 10000
 
-hidden_dim = 10 #hidden layer의 개수 #80
-learning_rate = 0.001 #0.01
+hidden_dim = 30 #hidden layer의 개수 #80
+learning_rate = 0.01 #0.01
 batch_size = 25000 #8000 #Batch 없이 하는게 효율적이지만, GPU 쓸 때 메모리 터짐 #현재 70
 
 '''

@@ -73,7 +73,6 @@ def dataset_cleaner(target_np):
     deleted_np = np.vstack((deleted_np, std))
     deleted_np = np.vstack((deleted_np, median))
     '''
-    
     return deleted_np
 
 #후에 Testing 시 필요
@@ -143,5 +142,3 @@ def user_generator(user_dir_path, file_list):
     merged_user = np.asarray(merged_user)
 
     return merged_user
-
-

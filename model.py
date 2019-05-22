@@ -15,6 +15,7 @@ def lstm(train_x, train_label, test_x, test_label, seq_length, data_dim, hidden_
     X = tf.placeholder(tf.float32, [None, seq_length, data_dim]) #배치크기 x 뉴런 수 x 입력차원(피쳐)
     Y = tf.placeholder(tf.float32, [None, n_class])
     keep_prob = tf.placeholder(tf.float32)
+    #sequence_length = tf.placeholder(tf.int32, [None])
 
     def model(keep_prob):
         #W = tf.Variable(tf.random_normal([hidden_dim, n_class]))
@@ -22,7 +23,6 @@ def lstm(train_x, train_label, test_x, test_label, seq_length, data_dim, hidden_
         
         W = tf.get_variable('W_output', dtype=tf.float32, initializer=tf.random_normal([hidden_dim, n_class], stddev=0.1))
         b = tf.get_variable('b_output', dtype=tf.float32, initializer=tf.zeros([n_class]))
-
 
         cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=hidden_dim,
         #cell = tf.contrib.rnn.LayerNormBasicLSTMCell(num_units=hidden_dim, #Batch NORM
@@ -36,12 +36,23 @@ def lstm(train_x, train_label, test_x, test_label, seq_length, data_dim, hidden_
                                             output_keep_prob=keep_prob)
         
         #dynamic
-        outputs, _states = tf.nn.dynamic_rnn(cell,
+        outputs, states = tf.nn.dynamic_rnn(cell,
                                             X,
                                             dtype=tf.float32)
 
+        print("##############")
+        print(outputs)
+        print('\n')
+
+        print("##############")
+        print(states)
+        print('\n')
+
         outputs = tf.transpose(outputs, [1,0,2])
         outputs = outputs[-1] #Many-to-One Model이므로 마지막 값만 사용
+        print("###############")
+        print(outputs)
+        print('\n')
 
         #Prediction Value
         softmax_y = tf.matmul(outputs, W) + b
@@ -99,7 +110,7 @@ def lstm(train_x, train_label, test_x, test_label, seq_length, data_dim, hidden_
                                         feed_dict={
                                             X: batch_xs,
                                             Y: batch_ys,
-                                            keep_prob : 0.5
+                                            keep_prob : 1.0
                                         })
                 total_cost += cost_val
 
