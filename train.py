@@ -11,42 +11,36 @@ from sklearn.model_selection import train_test_split
 
 import get_data
 import model
-#import model_rmse
-#import model_regression
+import model_bidirect
+import model_stacked
 
 #전처리한 데이터들 놓기
-bot_dir_path = 'D:/AION_DATA/30_bots/' 
+#bot_dir_path = 'D:/AION_DATA/may_bot_2nd/' 
+bot_dir_path = 'D:/AION_DATA/weekly_validation/w4_bot/'
 bot_file_list = os.listdir(bot_dir_path)
 
-user_dir_path = 'D:/AION_DATA/30_user_sample/'
+#user_dir_path = 'D:/AION_DATA/may_user_2nd/'
+user_dir_path = 'D:/AION_DATA/weekly_validation/w4_user/'
 user_file_list = os.listdir(user_dir_path)
 
-#hidden_dim : 80이 SOTA
 
-#하이퍼파라미터
-
-#output_dim = 1
-#iterations = 1000
-
-seq_length = 30 #뉴런의 개수 + 통계값 수
-data_dim = 11 #피쳐 
+seq_length = 63 #뉴런의 개수 + 통계값 수
+data_dim = 9 #피쳐 
 n_class = 2 #BinaryS Classification
-total_epochs = 10000
+total_epochs = 20000
 
-hidden_dim = 30 #hidden layer의 개수 #80
-learning_rate = 0.01 #0.01
-batch_size = 25000 #8000 #Batch 없이 하는게 효율적이지만, GPU 쓸 때 메모리 터짐 #현재 70
+hidden_dim = 64 #hidden layer의 개수 #80
+learning_rate = 0.001 #0.01
+batch_size = 3000 #아니면 #10000(0.93) -> 5000(0.94) 
 
 '''
 데이터 불러오기
 '''
 bots = get_data.bot_generator(bot_dir_path, bot_file_list) 
 print("Bots successfully Loaded")
-print('\n')
 
 users = get_data.user_generator(user_dir_path, user_file_list)
 print("Users successfully Loaded")
-print('\n')
 
 #Extract Necessary Features : 필요없는 피쳐 삭제
 def feature_exclude(arr):
@@ -68,6 +62,7 @@ def label_creation(label):
             #temp.append(1)
         result = np.asarray(temp)
         #result = np.expand_dims(result, axis=1)
+        print("Bots")
         print(result.shape)
         return result
     
@@ -77,6 +72,7 @@ def label_creation(label):
             #temp.append(0)
         result = np.asarray(temp)
         #result = np.expand_dims(result, axis=1)
+        print("Users")
         print(result.shape)
         return result      
 

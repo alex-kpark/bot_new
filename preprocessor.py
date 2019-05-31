@@ -8,7 +8,7 @@ import csv
 from os import listdir
 from os.path import isfile, join
 
-data_path = 'D:/AION_DATA/weekly/'
+data_path = 'D:/AION_DATA/weekly_may/'
 
 filenames = [f for f in listdir(data_path) if isfile(join(data_path, f))]
 bot_files = [] #weekly안의 봇 파일들 모음
@@ -20,8 +20,8 @@ for filename in filenames:
     else:
         user_files.append(filename)
 
-bot_save_path = 'D:/AION_DATA/60_bots/'
-user_save_path = 'D:/AION_DATA/60_users/'
+bot_save_path = 'D:/AION_DATA/individual_week_bot/'
+user_save_path = 'D:/AION_DATA/individual_week_user/'
 
 '''
 필요한 함수들 정의
@@ -135,6 +135,7 @@ def norm_flat(data_in_list):
 
 
 #봇 수집 -> 유저 할 때는 유저로 바꾸기만 하면 됨
+
 '''
 window_size = 60
 for bot_file in bot_files:
@@ -142,4 +143,60 @@ for bot_file in bot_files:
 
 for user_file in user_files:
     data_generator('user', data_path, user_file, window_size)
- '''
+'''
+path = 'D:/AION_DATA/stat_user/'
+save_dir = 'D:/AION_DATA/stat_user_sample/'
+filelist = listdir(path)
+
+
+def sampler(dir_path, filename, sample_size):
+
+    print(filename)
+    master_path = dir_path + filename
+
+    print('\n')
+    print("###################")
+    print(master_path, ' has started sampling process')
+    print("###################")
+
+    temp = []
+    for i in range(0, 11*60):
+        temp.append(str(i))
+
+    data = pd.read_csv(master_path, names=temp)
+    data = pd.DataFrame(data)
+
+    sample = data.sample(sample_size)
+    sample = sample.reset_index(drop=True)
+    #sample = sample.values
+    #sample_container.append(sample)
+
+    return sample
+
+def flat(data_in_list):
+    flatten_result = []
+    for element in data_in_list:
+        flatten = element.flatten()
+        flatten_result.append(flatten)
+    return flatten_result
+
+
+def sample_generator():
+    for filename in filelist:
+        print(filename)
+        save_path = save_dir + filename + '_sample.csv'
+
+        sample = sampler(path, filename, 33000)
+        
+        sample.to_csv(save_path, mode='w', header=False, index=False)
+
+        '''
+        flatten_list = flat(sample_container)
+
+        with open(save_path, 'w') as output:
+            writer = csv.writer(output, lineterminator='\n')
+            writer.writerows(flatten_list)
+        '''
+        print(save_path + ' Has Sampled!')
+
+#sample_generator()

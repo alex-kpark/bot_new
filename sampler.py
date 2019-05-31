@@ -3,8 +3,8 @@ import numpy as np
 import os
 import csv
 
-path = 'D:/AION_DATA/30_users/'
-save_dir = 'D:/AION_DATA/30_user_sample2/'
+path = 'D:/AION_DATA/stat_user/'
+save_dir = 'D:/AION_DATA/weekly_user_sampled/'
 filelist = os.listdir(path)
 
 
@@ -19,7 +19,7 @@ def sampler(dir_path, filename, sample_size):
     print("###################")
 
     temp = []
-    for i in range(0, 11*30):
+    for i in range(0, 11*60):
         temp.append(str(i))
 
     data = pd.read_csv(master_path, names=temp)
@@ -45,11 +45,9 @@ def sample_generator():
         print(filename)
         save_path = save_dir + filename + '_sample.csv'
 
-        sample = sampler(path, filename, 1000)
-        print(type(sample))
+        sample = sampler(path, filename, 40000)
         
         sample.to_csv(save_path, mode='w', header=False, index=False)
-
 
         '''
         flatten_list = flat(sample_container)
